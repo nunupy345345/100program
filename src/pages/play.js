@@ -26,7 +26,7 @@ export const Play = () => {
 //日本語からローマ字へ変更する
 function kanaToRoman(kana) {
   let AllStr = String(kana); //入力の全文
-  let roman; //一字毎に変換されたローマ字
+  let roman =[]; //一字毎に変換されたローマ字
   let AllRoman = []; //最終的にここに格納してローマ字全文にする
 
   function cutting() { //日本語文を一字ずつ切り出す
@@ -78,35 +78,53 @@ function kanaToRoman(kana) {
     'ぴゃ': ['pya'], 'ぴぃ': ['pyi'], 'ぴゅ': ['pyu'], 'ぴぇ': ['pye'], 'ぴょ': ['pyo'],
     'ぁ': ['la', 'xa'], 'ぃ': ['li', 'xi'], 'ぅ': ['lu', 'xu'], 'ぇ': ['le', 'xe'], 'ぉ': ['lo', 'xo'],
     'ゃ': ['lya', 'xya'], 'ゅ': ['lyu', 'xyu'], 'ょ': ['lyo', 'xyo'], 'っ': ['ltu', 'xtu'],
-    'ー': ['-'], ',': [','], '.': ['.'], '、': [','], '。': ['.'],
-    '・': ['/'], '、': [','], '。': ['.'], ' ':[' ']
+    'ー': ['-'], ',': [','], '、': [','], '。': ['.'], '.': ['.'], '・': ['/'], ' ':[' ']
   };
 
   while (AllStr) { //日本語文が存在する限り続く
     let firstStr = cutting(); //一文字目
     let next = romanMap[AllStr.slice(0, 1)]; //次の文字のローマ字
-    if (firstStr == 'っ') {
-      if (!AllStr || AllStr.match(/^[,.]/) || !next || next[0].match(/^[aiueon]/)) {
-        roman = [...romanMap[firstStr]];
-        AllRoman.push(roman);
-      } else {
+    if (!romanMap[firstStr]){
+      roman = [...firstStr]; //ローマ字はそのまま　
+    }else if (firstStr == 'っ') { //小い「つ」の場合
+      if (!AllStr || AllStr.match(/^[,.]/) || !next || next[0].match(/^[aiueon]/)) {//後ろの文字により省略できない
+        roman = [...romanMap[firstStr]];  
+      } else { //省略できる
         firstStr = cutting();
         if (isSmallChar()) firstStr += cutting();
-        roman = [...romanMap[firstStr].map(str => str.slice(0, 1) + str)];
-        AllRoman.push(roman);
+        roman = [...romanMap[firstStr].map(str => str.slice(0, 1) + str)]; //後ろの文字の子音をひとつ増やしたものを追加
       }
-    } else {
-      if (isSmallChar()) firstStr += cutting();
-      roman = romanMap[firstStr] ? [...romanMap[firstStr]] : [...firstStr];
-      if (firstStr == 'ん') {
+    } else {//小さな「つ」以外
+      if (isSmallChar()) { //後ろが小さい文字の時
+        firstStr += cutting();
+        if (romanMap[firstStr]){//後ろまで見て一塊で表せる時
+          roman = [...romanMap[firstStr]];
+          for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
+            for (let j=0; i<romanMap[firstStr.slice(1)].length; j++){
+              let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
+              roman.push(mergeroma);
+            }
+          }
+        } else {//表せない時
+          roman = [];//それぞれのromanMapを全通り足し合わせる
+          for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
+            for (let j=0; i<romanMap[firstStr.slice(1)].length; j++){
+              let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
+              roman.push(mergeroma);
+            }
+          }
+        }
+      } else if (firstStr == 'ん') { //n一つで完了させない処理（省略禁止）
         if (!AllStr) {
           roman.pop();
         } else {
-          if (next[0].match(/^[aiueony]/)) roman.pop();
+          if (next[0].match(/^[aiueony]/)) {
+            roman.pop()
+          };
         }
-      }
-      AllRoman.push(roman);
+      }  
     }
+    AllRoman.push(roman);
   }
 
   return result;
