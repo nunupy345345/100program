@@ -39,6 +39,26 @@ function kanaToRoman(kana) {
     return !!AllStr.slice(0, 1).match(/^[ぁぃぅぇぉゃゅょ]$/);
   }
 
+  function SmallChar(firstStr){
+    if (romanMap[firstStr]){//後ろまで見て一塊で表せる時
+      roman = [...romanMap[firstStr]];
+      for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
+        for (let j=0; j<romanMap[firstStr.slice(1)].length; j++){
+          let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
+          roman.push(mergeroma);
+        }
+      }
+    } else {//表せない時
+      roman = [];//それぞれのromanMapを全通り足し合わせる
+      for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
+        for (let j=0; i<romanMap[firstStr.slice(1)].length; j++){
+          let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
+          roman.push(mergeroma);
+        }
+      }
+    }
+  }
+
   const romanMap = { //対応表
     'あ': ['a'], 'い': ['i', 'yi'], 'う': ['u', 'wu'], 'え': ['e'], 'お': ['o'],
     'か': ['ka', 'ca'], 'き': ['ki'], 'く': ['ku', 'cu', 'qu'], 'け': ['ke'], 'こ': ['ko', 'co'],
@@ -78,7 +98,7 @@ function kanaToRoman(kana) {
     'ぴゃ': ['pya'], 'ぴぃ': ['pyi'], 'ぴゅ': ['pyu'], 'ぴぇ': ['pye'], 'ぴょ': ['pyo'],
     'ぁ': ['la', 'xa'], 'ぃ': ['li', 'xi'], 'ぅ': ['lu', 'xu'], 'ぇ': ['le', 'xe'], 'ぉ': ['lo', 'xo'],
     'ゃ': ['lya', 'xya'], 'ゅ': ['lyu', 'xyu'], 'ょ': ['lyo', 'xyo'], 'っ': ['ltu', 'xtu'],
-    'ー': ['-'], ',': [','], '、': [','], '。': ['.'], '.': ['.'], '・': ['/'], ' ':[' ']
+    'ー': ['-'], '、': [','], '。': ['.'], '・': ['/']
   };
 
   while (AllStr) { //日本語文が存在する限り続く
@@ -91,29 +111,22 @@ function kanaToRoman(kana) {
         roman = [...romanMap[firstStr]];  
       } else { //省略できる
         firstStr = cutting();
-        if (isSmallChar()) firstStr += cutting();
+        if (isSmallChar()) {//後ろが小さい文字の時
+          firstStr += cutting()
+          SmallChar(firstStr);
+        };
         roman = [...romanMap[firstStr].map(str => str.slice(0, 1) + str)]; //後ろの文字の子音をひとつ増やしたものを追加
+        for (let i=0; i<romanMap['っ'].length; i++){//省略しない場合も
+          for (let j=0; j<romanMap[firstStr].length; j++){
+            let mergeroma = romanMap['っ'][i] + romanMap[firstStr][j];
+            roman.push(mergeroma);
+          }
+        }
       }
     } else {//小さな「つ」以外
       if (isSmallChar()) { //後ろが小さい文字の時
         firstStr += cutting();
-        if (romanMap[firstStr]){//後ろまで見て一塊で表せる時
-          roman = [...romanMap[firstStr]];
-          for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
-            for (let j=0; i<romanMap[firstStr.slice(1)].length; j++){
-              let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
-              roman.push(mergeroma);
-            }
-          }
-        } else {//表せない時
-          roman = [];//それぞれのromanMapを全通り足し合わせる
-          for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
-            for (let j=0; i<romanMap[firstStr.slice(1)].length; j++){
-              let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
-              roman.push(mergeroma);
-            }
-          }
-        }
+        SmallChar(firstStr);
       } else if (firstStr == 'ん') { //n一つで完了させない処理（省略禁止）
         if (!AllStr) {
           roman.pop();
@@ -122,13 +135,14 @@ function kanaToRoman(kana) {
             roman.pop()
           };
         }
-      }  
+      } else{
+        roman = romanMap[firstStr];
+      } 
     }
     AllRoman.push(roman);
   }
-
-  return result;
+  return AllRoman;
 }
-
+console.log(kanaToRoman('えらばれたのはあやたかだが、かったのはなまちゃだった。'));
 
 export {kanaToRoman};
