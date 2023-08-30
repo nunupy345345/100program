@@ -77,8 +77,19 @@ export const Play = () => {
   return(
     <div className={StyleSheet.container}>
       <div>プレイ画面</div>
-      <div>{renderText()}</div>
-      <p>{}</p>
+      <p>
+        {RomasText.map((char,index) => (
+          <span ket={index} style={{color: index === currentTextIndex ? 'black' :'gray'}}>
+            {char}
+          </span>
+        ))}
+      </p>
+      <input 
+         type="text"
+         onKeyDown={handleKeyPress}
+         value={typedText}
+         readOnly={currentTextIndex !== RomasText.length -1}
+      />
       <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 
     </div>
     
