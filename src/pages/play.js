@@ -145,16 +145,13 @@ function kanaToRoman(kana) {
 }
 
 
-
-
-
 function Alljudgement(AllRoman){
   let idx1 = AllRoman.length;//取得リストの長さ
   let idx2 = 0;//プレイ中の場所
   let idx3 = 0;//何文字目か
-  let pattern = new Array(AllRoman.length).fill(0);
-  let temp = '';
-  let isStart = true;
+  let pattern = new Array(AllRoman.length).fill(0);//複数候補がある場合のリスト
+  let temp = '';//複数候補がある場合の保存用
+  let isStart = true;//falseでゲーム終了
 
   while(isStart){
     judgement();
@@ -172,7 +169,8 @@ function Alljudgement(AllRoman){
           idx3 += 1;
         } else if (idx2 < idx1 - 1){
           idx2 += 1;
-          idx3 = 0;
+          idx3 = 0;//次の項に移るため初期化
+          temp = '';//次の項に移るため初期化
         } else {
           isStart = false;
         }
@@ -207,8 +205,5 @@ function Alljudgement(AllRoman){
     return html;
   }
 }
-
-Alljudgement(kanaToRoman('お茶'));
-
 
 export {kanaToRoman};
