@@ -1,0 +1,9 @@
+.startbutton {
+  min-width : 64px;
+  line-height: 32px;
+  border-radius: 4px;
+  border : none;
+  padding: 0 16px;
+  color: #fff;
+  background: #639;
+}
