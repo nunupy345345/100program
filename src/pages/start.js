@@ -13,11 +13,22 @@ export const Start = () => {
   const handleClick1 = () => {
     window.location.href = "/play";
   }
+
+  const handleClick2 = () => {
+    window.location.href = "/company";
+  }
+
+  const handleClick3 = () => {
+    window.location.href = "/explain";
+  }
   
   return(
     <div>
       <div>スタート画面</div>
       <button className="startButton" onClick={() => {handleClick1()}} id="hai">playへ</button> 
+      <button className="startButton" onClick={() => {handleClick2()}} id="hai">compnanyへ</button> 
+      <button className="startButton" onClick={() => {handleClick3()}} id="hai">explainへ</button> 
+      
     </div>
   );
 }
