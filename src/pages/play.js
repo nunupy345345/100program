@@ -112,7 +112,7 @@ function kanaToRoman(kana) {
       } else { //省略できる
         firstStr = cutting();
         if (isSmallChar()) {//後ろが小さい文字の時
-          firstStr += cutting()
+          firstStr += cutting();
           SmallChar(firstStr);
         };
         roman = [...romanMap[firstStr].map(str => str.slice(0, 1) + str)]; //後ろの文字の子音をひとつ増やしたものを追加
@@ -132,7 +132,7 @@ function kanaToRoman(kana) {
           roman.pop();
         } else {
           if (next[0].match(/^[aiueony]/)) {
-            roman.pop()
+            roman.pop();
           };
         }
       } else{
@@ -143,6 +143,71 @@ function kanaToRoman(kana) {
   }
   return AllRoman;
 }
-console.log(kanaToRoman('えらばれたのはあやたかだが、かったのはなまちゃだった。'));
+
+
+
+
+
+function Alljudgement(AllRoman){
+  let idx1 = AllRoman.length;//取得リストの長さ
+  let idx2 = 0;//プレイ中の場所
+  let idx3 = 0;//何文字目か
+  let pattern = new Array(AllRoman.length).fill(0);
+  let temp = '';
+  let isStart = true;
+
+  while(isStart){
+    judgement();
+    let innerHTML = colorTyped();
+    //TODO表示用関数を作って埋め込む
+    console.log(innerHTML)
+  }
+
+  function judgement(){
+    document.addEventListener('keydown',(event)=>{
+      let key = event.key;//キーの取得
+      temp += key;
+      if (key == AllRoman[idx2][pattern[idx2]][idx3]){//候補の０番目に合致した時の処理
+        if (idx3 < AllRoman[idx2][pattern[idx2]].length - 1){
+          idx3 += 1;
+        } else if (idx2 < idx1 - 1){
+          idx2 += 1;
+        } else {
+          isStart = false;
+        }
+      } else if (AllRoman[idx2].length > 1) {//候補に合致しないとき別の候補があれば参照
+        let reg = new RegExp('^' + temp);
+        for (let i = 0; i < wordR[idx2].length; i++) {
+          if (!!wordR[idx2][i].match(reg)) {
+            pattern[idx2] = i;//合致した時パターン変更
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  function colorTyped(){
+    let html = '<div><span style="color:red">';
+    for (let i = 0; i < idx2; i++){//成功箇所の色付け
+      html += AllRoman[i][pattern[i]];
+    }  
+    for (let i = 0; i <= idx3; i++){
+      html += AllRoman[idx2][pattern[idx2]][i];
+    }
+    html += '</span><span>';
+    for (let i = AllRoman[idx2][pattern[idx2]].length + 1; i < AllRoman[idx2][pattern[idx2]].length; i++){
+      html += AllRoman[idx2][pattern[idx2]][i];
+    }
+    for (let i = idx2 + 1; i < idx1; i++){
+      html += AllRoman[i][pattern[idx2]];
+    }
+    html += '</span></div>';
+    return html;
+  }
+}
+
+Alljudgement(kanaToRoman('お茶'));
+
 
 export {kanaToRoman};
