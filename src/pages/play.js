@@ -143,6 +143,14 @@ export const Play = () => {
       let innerHTML = colorTyped();
       //TODO表示用関数を作って埋め込む
       console.log(innerHTML)
+      return(
+        <div className={StyleSheet.container}>
+          <h1>タイピングゲーム</h1>
+          <input type="text" />
+          <div>{innerHTML}</div>
+        <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 
+      </div>
+      );
     }
 
     function judgement(){
@@ -191,31 +199,87 @@ export const Play = () => {
     }
   }
 
-    const [typedText, setTypedText] = useState('');
-    const [currentKana, setCurrentKana] = useState('お茶'); // テスト用のかな文字
-  const [allRoman, setAllRoman] = useState([]); // ローマ字のリスト
-  const [currentIndex, setCurrentIndex] = useState(0); // インデックスの管理
+ 
 
   //ページを変えても値を受け渡すやつ
   const search = useLocation().search;
 
   const query2 = new URLSearchParams(search);
 
-  useEffect(() => {
-    // かな文字をローマ字に変換
-    setAllRoman(kanaToRoman(currentKana));
-  }, [currentKana]);
+  
   //クリックして別の場所に移るためのもの
   const handleClick2 = () => {
     window.location.href = "/result";
   }
   
+  
+const words = ["apple", "banana", "cherry", "grape", "orange", "strawberry", "watermelon", "pineapple", "blueberry", "raspberry"];
+const totalQuestions = 10;
+
+
+  const [currentWordIndex, setCurrentWordIndex] = useState(0); //現在の問題のインデックス
+  const [currentInput, setCurrentInput] = useState(''); //現在の入力
+  const [currentWord, setCurrentWord] = useState(words[currentWordIndex]);//現在の問題
+  const [inputStatus, setInputStatus] = useState([]);//各文字のステータス(あってるか、間違ってるか、入力されたか)
+  const [currentTextIndex,setcurrentTextIndex] = useState(0); //現在の文字が何番目かを出力させる
+  //問題が変わるたびに実行されるもの
+  useEffect(() => {
+    setCurrentWord(words[currentWordIndex]); //問題を更新
+    setCurrentInput(''); //入力を空にしなおす
+    setInputStatus([]);  //入力されているステータス(あってるか、間違っているかを判別)
+  }, [currentWordIndex]);
+  
+  //入力が変更されたときに呼ばれる関数
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setCurrentInput(inputValue); //現在の入力を更新する
+    
+    
+    //新しく入力された文字のステータスをリストとして管理する
+    const newInputStatus = [];
+    for (let i = 0; i < inputValue.length; i++) {
+      if (inputValue[i] === currentWord[i]) {
+        newInputStatus.push('correct'); //正しくする
+      } else {
+        newInputStatus.push('incorrect');//間違った文字にする
+      }
+    }
+    setInputStatus(newInputStatus); //入力ステータスを更新する(増やす)
+  };
+
+  const handleInputEnter = (e) => {
+    if (e.key === 'Enter') {
+      if (currentInput === currentWord) {
+        if (currentWordIndex < totalQuestions - 1) {
+          setCurrentWordIndex(currentWordIndex + 1);
+        } else {
+          alert('ゲーム終了！お疲れさまでした！');
+        }
+      }
+    }
+  };
+
   return(
-    <div className={StyleSheet.container}>
-      <h1>タイピングゲーム</h1>
-      <input type="text" onKeyDown={Alljudgement}/>
-    <div>{Alljudgement(kanaToRoman('おいしいおちゃ'))}</div>
+    <div>
+    <h1>タイピングゲーム</h1>
+    <p>問題: {currentWord}</p>
+    <input
+      type="text"
+      value={currentInput}
+      onChange={handleInputChange}
+      onKeyDown={handleInputEnter}
+    />
+    <div>
+      {currentWord.split('').map((letter, index) => (
+        <span
+          key={index}
+          className={`letter ${inputStatus[index]}`} // 修正
+        >
+          {letter}
+        </span>
+      ))}
+    </div>
     <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 
   </div>
   );
-  }
+}
