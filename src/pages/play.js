@@ -172,13 +172,14 @@ function Alljudgement(AllRoman){
           idx3 += 1;
         } else if (idx2 < idx1 - 1){
           idx2 += 1;
+          idx3 = 0;
         } else {
           isStart = false;
         }
       } else if (AllRoman[idx2].length > 1) {//候補に合致しないとき別の候補があれば参照
         let reg = new RegExp('^' + temp);
-        for (let i = 0; i < wordR[idx2].length; i++) {
-          if (!!wordR[idx2][i].match(reg)) {
+        for (let i = 0; i < AllRoman[idx2].length; i++) {
+          if (!!AllRoman[idx2][i].match(reg)) {
             pattern[idx2] = i;//合致した時パターン変更
             break;
           }
