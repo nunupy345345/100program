@@ -17,7 +17,7 @@ export const Start = () => {
   return(
     <div>
       <div>スタート画面</div>
-      <button onClick={() => {handleClick1()}} id="hai">playへ</button> 
+      <button className="startButton" onClick={() => {handleClick1()}} id="hai">playへ</button> 
     </div>
   );
 }

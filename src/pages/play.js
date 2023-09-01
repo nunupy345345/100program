@@ -1,26 +1,137 @@
-import {NavLink,Rocation,useParams,useLocation} from "react-router-dom";
-import React, { useState, useEffect} from 'react' ;
+import {NavLink,useParams,useLocation} from "react-router-dom";
+import React, {useRef, useState, useEffect, KeyboardEvent} from 'react' ;
 import './play.css';
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
-export const Play = () => {
+  
+const Play = () => {
 
+  let allRoman = kanaToRoman('おちゃがし');
+  let idx1 = allRoman.length;
+  const initialListState = {
+    a : kanaToRoman('おちゃがし'),
+    i1 : allRoman.length,//取得リストの長さ
+    i2 : 0,//プレイ中の場所
+    i3 : 0,//何文字目か
+    pn : new Array(idx1).fill(0),//複数候補がある場合のリスト
+    tp : '',//複数候補がある場合の保存用
+    iSt : true,//falseでゲーム終了
+  };
+  const [list, setList] = useState(initialListState);
+
+  const judgement = (event) => {
+    let allRoman = list.a;
+    let idx1 = list.i1;
+    let idx2 = list.i2;
+    let idx3 = list.i3;
+    let pattern = list.pn;
+    let temp = list.tp;
+    let isStart = list.iSt;
+    let key = event.key;//キーの取得
+    console.log(key);
+    temp += key;
+    if (key === allRoman[idx2][pattern[idx2]][idx3]){//候補の０番目に合致した時の処理
+      if (idx3 < allRoman[idx2][pattern[idx2]].length - 1){
+        idx3 += 1;
+      } else if (idx2 < idx1 - 1){
+        idx2 += 1;
+        idx3 = 0;//次の項に移るため初期化
+        temp = '';//次の項に移るため初期化
+      } else {
+        idx2 += 1;
+        idx3 = 0;//次の項に移るため初期化
+        temp = '';//次の項に移るため初期化
+        isStart = false;
+      }
+    } else if (allRoman[idx2].length > 1) {//候補に合致しないとき別の候補があれば参照
+      let reg = new RegExp('^' + temp);
+      for (let i = 0; i < allRoman[idx2].length; i++) {
+        if (!!allRoman[idx2][i].match(reg)) {
+          pattern[idx2] = i;//合致した時パターン変更
+          break;
+        }
+      }
+    };
+    console.log(list);
+    setList(list => ({
+      ...list,
+      a : allRoman,
+      i1 : idx1,//取得リストの長さ
+      i2 : idx2,//プレイ中の場所
+      i3 : idx3,//何文字目か
+      pn : pattern,//複数候補がある場合のリスト
+      tp : temp,//複数候補がある場合の保存用
+      iSt : isStart,//falseでゲーム終了
+    })); 
+    console.log(list);
+  };
+  /*
+  const [typedText, setTypedText] = useState('');
+  const [currentKana, setCurrentKana] = useState('おちゃ'); // テスト用のかな文字
+  //const [allRoman, setAllRoman] = useState([]); // ローマ字のリスト
+  const [currentIndex, setCurrentIndex] = useState(0); // インデックスの管理
+  
+  useEffect(() => {
+    // かな文字をローマ字に変換
+    setAllRoman(kanaToRoman(currentKana));
+  }, [currentKana]);
+  */
+  
   //ページを変えても値を受け渡すやつ
   const search = useLocation().search;
-
   const query2 = new URLSearchParams(search);
   
   //クリックして別の場所に移るためのもの
   const handleClick2 = () => {
     window.location.href = "/result";
   }
-  
+  const handleKeyDown = (event) => {
+    judgement(event,list);
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown',handleKeyDown);
+    };
+  },[]);
+
   return(
-    <div>
-      <div>プレイ画面</div>
+    <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
+      <div dangerouslySetInnerHTML={{__html: colorTyped(list)}}/>
       <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 
     </div>
-    
   );
+}
+
+const colorTyped = (list) => {
+  let allRoman = list.a;
+  let idx1 = list.i1;
+  let idx2 = list.i2;
+  let idx3 = list.i3;
+  let pattern = list.pn;
+
+  let html = '<div><span style="color:red">';
+  if (idx2 > 0) {
+    for (let i = 0; i < idx2; i++){//成功箇所の色付け
+      html += allRoman[i][pattern[i]];
+    }  
+  } 
+  if (idx3 > 0) {
+    for (let i = 0; i < idx3; i++){
+      html += allRoman[idx2][pattern[idx2]][i];
+    }
+  }
+  html += '</span><span>';
+  for (let i = idx3; i < allRoman[idx2][pattern[idx2]].length; i++){
+    html += allRoman[idx2][pattern[idx2]][i];
+  }
+  for (let i = idx2 + 1; i < idx1; i++){
+    html += allRoman[i][pattern[i]];
+  }
+  html += '</span></div>';
+  console.log(html);
+  return html; 
 }
 
 //日本語からローマ字へ変更する
@@ -62,8 +173,8 @@ function kanaToRoman(kana) {
   const romanMap = { //対応表
     'あ': ['a'], 'い': ['i', 'yi'], 'う': ['u', 'wu'], 'え': ['e'], 'お': ['o'],
     'か': ['ka', 'ca'], 'き': ['ki'], 'く': ['ku', 'cu', 'qu'], 'け': ['ke'], 'こ': ['ko', 'co'],
-    'さ': ['sa'], 'し': ['si', 'shi', 'ci'], 'す': ['su'], 'せ': ['se', 'ce'], 'そ': ['so'],
-    'た': ['ta'], 'ち': ['ti', 'chi'], 'つ': ['tu', 'tsu'], 'て': ['te'], 'と': ['to'],
+    'さ': ['sa'], 'し': ['shi', 'si', 'ci'], 'す': ['su'], 'せ': ['se', 'ce'], 'そ': ['so'],
+    'た': ['ta'], 'ち': ['chi', 'ti'], 'つ': ['tu', 'tsu'], 'て': ['te'], 'と': ['to'],
     'な': ['na'], 'に': ['ni'], 'ぬ': ['nu'], 'ね': ['ne'], 'の': ['no'],
     'は': ['ha'], 'ひ': ['hi'], 'ふ': ['fu', 'hu'], 'へ': ['he'], 'ほ': ['ho'],
     'ま': ['ma'], 'み': ['mi'], 'む': ['mu'], 'め': ['me'], 'も': ['mo'],
@@ -80,7 +191,7 @@ function kanaToRoman(kana) {
     'くぁ': ['qa', 'qwa'], 'くぃ': ['qi', 'qwi'], 'くぇ': ['qe', 'qwe'], 'くぉ': ['qo', 'qwo'], 'くゃ': ['qya'], 'くゅ': ['qyu'], 'くょ': ['qyo'],
     'しゃ': ['sya', 'sha'], 'しぃ': ['syi'], 'しゅ': ['syu', 'shu'], 'しぇ': ['sye', 'she'], 'しょ': ['syo', 'sho'],
     'つぁ': ['tsa'], 'つぃ': ['tsi'], 'つぇ': ['tse'], 'つぉ': ['tso'],
-    'ちゃ': ['tya', 'cha'], 'ちぃ': ['tyi'], 'ちゅ': ['tyu', 'chu'], 'ちぇ': ['tye', 'che'], 'ちょ': ['tyo', 'cho'],
+    'ちゃ': ['tya', 'cha'], 'ちぃ': ['tyi'], 'ちゅ': ['chu', 'tyu'], 'ちぇ': ['tye', 'che'], 'ちょ': ['tyo', 'cho'],
     'てゃ': ['tha'], 'てぃ': ['thi'], 'てゅ': ['thu'], 'てぇ': ['the'], 'てょ': ['tho'],
     'とぁ': ['twa'], 'とぃ': ['twi'], 'とぅ': ['twu'], 'とぇ': ['twe'], 'とぉ': ['two'],
     'ひゃ': ['hya'], 'ひぃ': ['hyi'], 'ひゅ': ['hyu'], 'ひぇ': ['hye'], 'ひょ': ['hyo'],
@@ -106,7 +217,7 @@ function kanaToRoman(kana) {
     let next = romanMap[AllStr.slice(0, 1)]; //次の文字のローマ字
     if (!romanMap[firstStr]){
       roman = [...firstStr]; //ローマ字はそのまま　
-    }else if (firstStr == 'っ') { //小い「つ」の場合
+    }else if (firstStr === 'っ') { //小い「つ」の場合
       if (!AllStr || AllStr.match(/^[,.]/) || !next || next[0].match(/^[aiueon]/)) {//後ろの文字により省略できない
         roman = [...romanMap[firstStr]];  
       } else { //省略できる
@@ -127,7 +238,7 @@ function kanaToRoman(kana) {
       if (isSmallChar()) { //後ろが小さい文字の時
         firstStr += cutting();
         SmallChar(firstStr);
-      } else if (firstStr == 'ん') { //n一つで完了させない処理（省略禁止）
+      } else if (firstStr === 'ん') { //n一つで完了させない処理（省略禁止）
         if (!AllStr) {
           roman.pop();
         } else {
@@ -145,65 +256,4 @@ function kanaToRoman(kana) {
 }
 
 
-function Alljudgement(AllRoman){
-  let idx1 = AllRoman.length;//取得リストの長さ
-  let idx2 = 0;//プレイ中の場所
-  let idx3 = 0;//何文字目か
-  let pattern = new Array(AllRoman.length).fill(0);//複数候補がある場合のリスト
-  let temp = '';//複数候補がある場合の保存用
-  let isStart = true;//falseでゲーム終了
-
-  while(isStart){
-    judgement();
-    let innerHTML = colorTyped();
-    //TODO表示用関数を作って埋め込む
-    console.log(innerHTML)
-  }
-
-  function judgement(){
-    document.addEventListener('keydown',(event)=>{
-      let key = event.key;//キーの取得
-      temp += key;
-      if (key == AllRoman[idx2][pattern[idx2]][idx3]){//候補の０番目に合致した時の処理
-        if (idx3 < AllRoman[idx2][pattern[idx2]].length - 1){
-          idx3 += 1;
-        } else if (idx2 < idx1 - 1){
-          idx2 += 1;
-          idx3 = 0;//次の項に移るため初期化
-          temp = '';//次の項に移るため初期化
-        } else {
-          isStart = false;
-        }
-      } else if (AllRoman[idx2].length > 1) {//候補に合致しないとき別の候補があれば参照
-        let reg = new RegExp('^' + temp);
-        for (let i = 0; i < AllRoman[idx2].length; i++) {
-          if (!!AllRoman[idx2][i].match(reg)) {
-            pattern[idx2] = i;//合致した時パターン変更
-            break;
-          }
-        }
-      }
-    });
-  }
-
-  function colorTyped(){
-    let html = '<div><span style="color:red">';
-    for (let i = 0; i < idx2; i++){//成功箇所の色付け
-      html += AllRoman[i][pattern[i]];
-    }  
-    for (let i = 0; i <= idx3; i++){
-      html += AllRoman[idx2][pattern[idx2]][i];
-    }
-    html += '</span><span>';
-    for (let i = AllRoman[idx2][pattern[idx2]].length + 1; i < AllRoman[idx2][pattern[idx2]].length; i++){
-      html += AllRoman[idx2][pattern[idx2]][i];
-    }
-    for (let i = idx2 + 1; i < idx1; i++){
-      html += AllRoman[i][pattern[idx2]];
-    }
-    html += '</span></div>';
-    return html;
-  }
-}
-
-export {kanaToRoman};
+export {kanaToRoman, Play};
