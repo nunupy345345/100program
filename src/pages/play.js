@@ -19,7 +19,8 @@ const Play = () => {
   };
   const [list, setList] = useState(initialListState);
 
-  const judgement = (event) => {
+  const judgement = (event,list) => {
+    
     let allRoman = list.a;
     let idx1 = list.i1;
     let idx2 = list.i2;
@@ -33,18 +34,21 @@ const Play = () => {
     if (key === allRoman[idx2][pattern[idx2]][idx3]){//候補の０番目に合致した時の処理
       if (idx3 < allRoman[idx2][pattern[idx2]].length - 1){
         idx3 += 1;
+        console.log('ohayo')
       } else if (idx2 < idx1 - 1){
         idx2 += 1;
         idx3 = 0;//次の項に移るため初期化
         temp = '';//次の項に移るため初期化
+        console.log('hey')
       } else {
-        idx2 += 1;
         idx3 = 0;//次の項に移るため初期化
         temp = '';//次の項に移るため初期化
         isStart = false;
+        console.log('henta')
       }
     } else if (allRoman[idx2].length > 1) {//候補に合致しないとき別の候補があれば参照
       let reg = new RegExp('^' + temp);
+      console.log('peach')
       for (let i = 0; i < allRoman[idx2].length; i++) {
         if (!!allRoman[idx2][i].match(reg)) {
           pattern[idx2] = i;//合致した時パターン変更
@@ -52,9 +56,7 @@ const Play = () => {
         }
       }
     };
-    console.log(list);
-    setList(list => ({
-      ...list,
+    const newList = {
       a : allRoman,
       i1 : idx1,//取得リストの長さ
       i2 : idx2,//プレイ中の場所
@@ -62,9 +64,12 @@ const Play = () => {
       pn : pattern,//複数候補がある場合のリスト
       tp : temp,//複数候補がある場合の保存用
       iSt : isStart,//falseでゲーム終了
-    })); 
+    };
+    console.log(newList);
+    setList(newList); 
     console.log(list);
   };
+  
   /*
   const [typedText, setTypedText] = useState('');
   const [currentKana, setCurrentKana] = useState('おちゃ'); // テスト用のかな文字
@@ -94,7 +99,7 @@ const Play = () => {
     return () => {
       document.removeEventListener('keydown',handleKeyDown);
     };
-  },[]);
+  },[list]);
 
   return(
     <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
