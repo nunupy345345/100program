@@ -8,10 +8,16 @@ import { anime_word_list } from "./words";
 
   
 export const Play = () => {
+    
+  //ページを変えても値を受け渡すやつ
+  const search = useLocation().search;
+  const query2 = new URLSearchParams(search);
+  
   let list_length = anime_word_list.length;
   const randomNumber = Math.floor(Math.random()*list_length);
   let allRoman = kanaToRoman(anime_word_list[randomNumber][1]);
   let idx1 = allRoman.length;
+  const divRef = useRef(null);
 
   const initialListState = {
     i1 : allRoman.length,//取得リストの長さ
@@ -84,12 +90,14 @@ export const Play = () => {
             temp = '';
           } else {
             idx3 = temp.length;
-            temp = '';
           }
+        } else {
+          temp = temp.slice(0,-1);
         }
       }
+    }else {
+      temp = temp.slice(0,-1);
     };
-    console.log(list);
     if (isStart){
       const newList = {
         i1 : idx1,//取得リストの長さ
@@ -99,46 +107,26 @@ export const Play = () => {
         tp : temp,//複数候補がある場合の保存用
         iSt : isStart,//falseでゲーム終了
       };
-      console.log("List updated:", list);
+      console.log(list);
+      console.log(showList);
       setList(newList); 
     } 
   };
-  
-  /*
-  const [typedText, setTypedText] = useState('');
-  const [currentKana, setCurrentKana] = useState('おちゃ'); // テスト用のかな文字
-  //const [allRoman, setAllRoman] = useState([]); // ローマ字のリスト
-  const [currentIndex, setCurrentIndex] = useState(0); // インデックスの管理
-  
-  useEffect(() => {
-    // かな文字をローマ字に変換
-    setAllRoman(kanaToRoman(currentKana));
-  }, [currentKana]);
-  */
-  
-  //ページを変えても値を受け渡すやつ
-  const search = useLocation().search;
-  const query2 = new URLSearchParams(search);
-  
+
   //クリックして別の場所に移るためのもの
   const handleClick2 = () => {
     window.location.href = "/result";
   }
   const handleKeyDown = (event) => {
-    Judgement(event,list,showList);
+    if (!event.repeat){
+      Judgement(event,list,showList);
+    }
   }
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown',handleKeyDown);
-    };
-  },[list]);
-
+  
   useEffect(() => {
     const updateHTML = colorTyped(list, showList);
     setColorTypedOutput(updateHTML);
-  }, [list,showList]);
+  }, [list, showList]);
 
   return(
     <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
