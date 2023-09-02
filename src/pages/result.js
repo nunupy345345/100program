@@ -15,13 +15,14 @@ export const Result = () => {
   }
   //クリックして別の場所に移るためのもの
   const handleClick4 = () => {
-    window.location.href = "/start";
+    window.location.href = "/coupon";
   }
   
   return(
     <div>
       <div>リザルト画面</div>
       <button onClick={() => {handleClick3()}} id="hai">startへ</button> 
+      <button onClick={() => {handleClick4()}} id="hai">couponへ</button> 
     </div>
     
   );

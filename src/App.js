@@ -8,6 +8,7 @@ import { Play } from "./pages/play";
 import { Result } from "./pages/result";
 import {Explain} from "./pages/explain";
 import {Company} from "./pages/company";
+import {Coupon} from "./pages/coupon";
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route activeClassName="active" path="/explain"element={<Explain/>}/>
         <Route activeClassName="active" path="/company"element={<Company/>}/>
         <Route activeClassName="active" path="/explain"element={<Explain/>}/>
+        <Route activeClassName="active" path="/coupon"element={<Coupon/>}/>
 
       </Routes>
     </BrowserRouter>
