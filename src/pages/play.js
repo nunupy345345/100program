@@ -14,7 +14,6 @@ export const Play = () => {
   let idx1 = allRoman.length;
 
   const initialListState = {
-    a : kanaToRoman(anime_word_list[randomNumber][1]),
     i1 : allRoman.length,//取得リストの長さ
     i2 : 0,//プレイ中の場所
     i3 : 0,//何文字目か
@@ -22,32 +21,35 @@ export const Play = () => {
     tp : '',//複数候補がある場合の保存用
     iSt : true,//falseでゲーム終了
   };
-
-  const [title, setTitle] = useState(anime_word_list[randomNumber][0]);
-  const [jaTitle, setJaTitle] = useState(anime_word_list[randomNumber][1]);
+  const initialShowList = {
+    title: anime_word_list[randomNumber][0],
+    jaTitle: anime_word_list[randomNumber][1],
+    a: kanaToRoman(anime_word_list[randomNumber][1])
+  };
+  const [showList, setShowList] = useState(initialShowList);
   const [list, setList] = useState(initialListState);
   const [colorTypedOutput, setColorTypedOutput] = useState('');
 
   const startNewRound = () => {
     const newRandomNumber = Math.floor(Math.random() * anime_word_list.length);
     const newAllRoman = kanaToRoman(anime_word_list[newRandomNumber][1]);
-
-    setTitle(anime_word_list[newRandomNumber][0]);
-    setJaTitle(anime_word_list[newRandomNumber][1]);
-    const newList2 = {
-      a: newAllRoman,
+    setShowList({
+      title: anime_word_list[newRandomNumber][0],
+      jaTitle: anime_word_list[newRandomNumber][1],
+      a: newAllRoman
+    });
+    setList({
       i1: newAllRoman.length,
       i2: 0,
       i3: 0,
       pn: new Array(newAllRoman.length).fill(0),
       tp: '',
       iSt: true,
-    }
-    setList(newList2);
+    });
   };
 
-  const judgement = (event,list) => {
-    let allRoman = list.a;
+  const Judgement = (event,list, showList) => {
+    let allRoman = showList.a;
     let idx1 = list.i1;
     let idx2 = list.i2;
     let idx3 = list.i3;
@@ -57,6 +59,7 @@ export const Play = () => {
     let key = event.key;//キーの取得
     console.log(key);
     temp += key;
+  
     if (key === allRoman[idx2][pattern[idx2]][idx3]){//候補の０番目に合致した時の処理
       if (idx3 < allRoman[idx2][pattern[idx2]].length - 1){
         idx3 += 1;
@@ -87,17 +90,18 @@ export const Play = () => {
       }
     };
     console.log(list);
-    const newList = {
-      a : allRoman,
-      i1 : idx1,//取得リストの長さ
-      i2 : idx2,//プレイ中の場所
-      i3 : idx3,//何文字目か
-      pn : pattern,//複数候補がある場合のリスト
-      tp : temp,//複数候補がある場合の保存用
-      iSt : isStart,//falseでゲーム終了
-    };
-    console.log("List updated:", list);
-    setList(newList); 
+    if (isStart){
+      const newList = {
+        i1 : idx1,//取得リストの長さ
+        i2 : idx2,//プレイ中の場所
+        i3 : idx3,//何文字目か
+        pn : pattern,//複数候補がある場合のリスト
+        tp : temp,//複数候補がある場合の保存用
+        iSt : isStart,//falseでゲーム終了
+      };
+      console.log("List updated:", list);
+      setList(newList); 
+    } 
   };
   
   /*
@@ -121,7 +125,7 @@ export const Play = () => {
     window.location.href = "/result";
   }
   const handleKeyDown = (event) => {
-    judgement(event,list);
+    Judgement(event,list,showList);
   }
 
   useEffect(() => {
@@ -132,14 +136,14 @@ export const Play = () => {
   },[list]);
 
   useEffect(() => {
-    const updateHTML = colorTyped(list);
+    const updateHTML = colorTyped(list, showList);
     setColorTypedOutput(updateHTML);
-  }, [list]);
+  }, [list,showList]);
 
   return(
     <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
-      <div>{title}</div>
-      <div>{jaTitle}</div>
+      <div>{showList.title}</div>
+      <div>{showList.jaTitle}</div>
       <div dangerouslySetInnerHTML={{__html: colorTypedOutput }}/>
       <button onClick={() => startNewRound()} id="hai">Next Round</button>
       <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 

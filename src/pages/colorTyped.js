@@ -1,5 +1,5 @@
- export const colorTyped = (list) => {
-  let allRoman = list.a;
+ export const colorTyped = (list, showList) => {
+  let allRoman = showList.a;
   let idx1 = list.i1;
   let idx2 = list.i2;
   let idx3 = list.i3;
