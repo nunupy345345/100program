@@ -1,9 +1,21 @@
-.startbutton {
-  min-width : 64px;
-  line-height: 32px;
-  border-radius: 4px;
-  border : none;
-  padding: 0 16px;
-  color: #fff;
-  background: #639;
+.header{
+  /* Layout Properties */
+position:fixed;
+top: 0px;
+left: -30px;
+/*width: 100vw;
+height: 250px;
+/* UI Properties */
+/*background: transparent url('../images/noren.jpg') 50% 0% no-repeat padding-box;
+opacity: 1;*/
+}
+.header img{
+  width:100vw;
+}
+.body img{
+  width:50vw;
+  top: 10vw;
+  margin:13% 22% 0%;
+  text-align: 0 auto;
+
 }

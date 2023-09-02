@@ -13,6 +13,10 @@ export const Result = () => {
   const handleClick3 = () => {
     window.location.href = "/start";
   }
+  //クリックして別の場所に移るためのもの
+  const handleClick4 = () => {
+    window.location.href = "/start";
+  }
   
   return(
     <div>
