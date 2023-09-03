@@ -1,6 +1,11 @@
 import {NavLink,Rocation,useParams,useLocation} from "react-router-dom";
 import React, { useState, useEffect} from 'react' ;
 import './result.css';
+import norenImage from "../images/header.png";
+import yazirushiImage from "../images/yazirushi.jpg";
+import yazirushiExplainImage from "../images/yazirushiExplain.jpg";
+import arigatouImage from "../images/arigatou.jpg";
+import ToTitleImage from "../images/ToTitle.jpg";
 
 export const Result = () => {
 
@@ -20,9 +25,11 @@ export const Result = () => {
   
   return(
     <div>
-      <div>リザルト画面</div>
-      <button onClick={() => {handleClick3()}} id="hai">startへ</button> 
-      <button onClick={() => {handleClick4()}} id="hai">couponへ</button> 
+      <div className='header'><img src={norenImage} onClick={() => {handleClick4()}}/></div>
+      <div className='yazirushi'><img src={yazirushiImage}/></div>
+      <div className='yazirushiExplain'><img src={yazirushiExplainImage}/></div>
+      <div className='arigatou'><img src={arigatouImage}/></div>
+      <div className='ToTitle' onClick={() => {handleClick3()}}><img src={ToTitleImage}/></div>
     </div>
     
   );
