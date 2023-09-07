@@ -1,9 +1,10 @@
-import {NavLink,useParams,useLocation} from "react-router-dom";
+import {NavLink,useParams,useLocation,useNavigate} from "react-router-dom";
 import React, {useRef, useState, useEffect, KeyboardEvent} from 'react' ;
 import './play.css';
 import { keyboard } from "@testing-library/user-event/dist/keyboard";
 import { kanaToRoman } from "./kanaToRoman";
 import { colorTyped } from "./colorTyped";
+import { TypingTimer } from "./timer";
 import { anime_word_list } from "./words";
 
   
@@ -17,7 +18,6 @@ export const Play = () => {
   const randomNumber = Math.floor(Math.random()*list_length);
   let allRoman = kanaToRoman(anime_word_list[randomNumber][1]);
   let idx1 = allRoman.length;
-  const divRef = useRef(null);
 
   const initialListState = {
     i1 : allRoman.length,//取得リストの長さ
@@ -32,11 +32,18 @@ export const Play = () => {
     jaTitle: anime_word_list[randomNumber][1],
     a: kanaToRoman(anime_word_list[randomNumber][1])
   };
-  const [showList, setShowList] = useState(initialShowList);
-  const [list, setList] = useState(initialListState);
-  const [colorTypedOutput, setColorTypedOutput] = useState('');
+  const [showList, setShowList] = useState(initialShowList);//表示用
+  const [historyList, setHistoryList] = useState([]);//resultでの表示用
+  const [missCounted, setMissCounted] = useState(0);
+  const [list, setList] = useState(initialListState);//judgementやcolorTypedで用いる変数
+  const [count, setCount] = useState(0);//何回目の文章セットか
+  const [elapsedTime, setElapsedTime] = useState(0);//タイマー関連
+  <TypingTimer onUpdate={(time) => {
+    setElapsedTime(time);
+  }}/>
+  const [colorTypedOutput, setColorTypedOutput] = useState('');//colorTypedを呼ぶのに用いる本当に必要かは要検討
 
-  const startNewRound = () => {
+  const startNewRound = () => {//新しい文章セットの用意
     const newRandomNumber = Math.floor(Math.random() * anime_word_list.length);
     const newAllRoman = kanaToRoman(anime_word_list[newRandomNumber][1]);
     setShowList({
@@ -77,6 +84,8 @@ export const Play = () => {
         idx3 += 1;//次の項に移るため初期化
         temp = '';//次の項に移るため初期化
         isStart = false;
+        setHistoryList([...historyList, showList.title]);
+        setCount(count+1);
         startNewRound();
       }
     } else if (allRoman[idx2].length > 1) {//候補に合致しないとき別の候補があれば参照
@@ -97,6 +106,7 @@ export const Play = () => {
       }
     }else {
       temp = temp.slice(0,-1);
+      setMissCounted(missCounted + 1);
     };
     if (isStart){
       const newList = {
@@ -113,23 +123,50 @@ export const Play = () => {
     } 
   };
 
+  //resultに変数を送信するよう
+  const navigate = useNavigate();
+  const sendDataToAnotherPage = () => {//result画面に表示する用
+    const variable1 = historyList;
+    const variable2 = missCounted
+    navigate(`/result?var1=${variable1}&var2=${variable2}&time=${elapsedTime}`);
+  };
+
   //クリックして別の場所に移るためのもの
   const handleClick2 = () => {
-    window.location.href = "/result";
+    sendDataToAnotherPage();
   }
   const handleKeyDown = (event) => {
     if (!event.repeat){
       Judgement(event,list,showList);
     }
   }
+
+  useEffect(() => {
+    const handleDocumentKeyDown = (event) => {
+        if (!event.repeat){
+            Judgement(event, list, showList);
+        }
+    }
+    document.addEventListener('keydown', handleDocumentKeyDown);
+    return () => {
+        document.removeEventListener('keydown', handleDocumentKeyDown);
+    };
+}, [list, showList]);
   
   useEffect(() => {
     const updateHTML = colorTyped(list, showList);
     setColorTypedOutput(updateHTML);
   }, [list, showList]);
 
+  useEffect(() => {
+    if (count === 10){
+      sendDataToAnotherPage();
+    }
+  },[count]);
+
   return(
     <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
+      <TypingTimer onUpdate={(time) => setElapsedTime(time)} />
       <div>{showList.title}</div>
       <div>{showList.jaTitle}</div>
       <div dangerouslySetInnerHTML={{__html: colorTypedOutput }}/>
