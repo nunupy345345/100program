@@ -1,0 +1,22 @@
+.header img {
+  position:fixed;
+  top: 0px;
+  left: 0px;
+  width:100vw;
+}
+.yazirushi img {
+  width: 2vw;
+  margin: 13% 0% 0% 93%;
+}
+.yazirushiExplain img{
+  width: 35vw;
+  margin: 0% 0% 0% 60%;
+}
+.arigatou img {
+  width:80vw;
+  margin: 5% 10% 0% 10%;
+}
+.ToTitle img {
+  width:20vw;
+  margin:10% 5% 0% 70%
+}

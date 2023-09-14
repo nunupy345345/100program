@@ -2,12 +2,20 @@
   color: green;
 }
 
-.inncorrect {
+.incorrect {
   color: red;
 }
 
 .user-input {
   border: none;
-  border-bottom: 2px solid #333
+  border-bottom: 2px solid #333;
 }
+
+.input {
+  outline: 'none';
+  width: '100%';
+  text-align: 'center';
+  font-Size: '24px'
+}
+
 

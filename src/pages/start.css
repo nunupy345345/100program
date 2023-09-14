@@ -2,7 +2,8 @@
   /* Layout Properties */
 position:fixed;
 top: 0px;
-left: -30px;
+left: 0px;
+
 /*width: 100vw;
 height: 250px;
 /* UI Properties */
@@ -20,12 +21,77 @@ opacity: 1;*/
 
 }
 
-.startbutton {
-  min-width : 64px;
-  line-height: 32px;
-  border-radius: 4px;
-  border : none;
-  padding: 0 16px;
-  color: #fff;
-  background: #639;
+.title2 img {
+  width:10vw;
+  margin:0% 42% 0%;
+  text-align: 0 auto;
+}
+.startButton img {
+  width:40vw;
+  margin:0% 26% 0%;
+  text-align: center;
+}
+.scroll img{
+  width:7vw;
+  margin:0% 0% 0% 5%;
+}
+.explain {
+  display:flex;
+}
+.explainTitleImg {
+  width: 50vw;
+  margin: 2% 0% 0% 8%
+}
+.explainImg {
+  width:40vw;
+  margin : 0% 0% 0% 10%;
+}
+.typingImg {
+  width: 25vw;
+  margin: 0% 0% 0% 30%;
+}
+.companytitleImg img{
+  width:20vw;
+  margin:10% 0% 0% 5%
+}
+.companyExplainImg img{
+  width: 30vw;
+  margin:2% 0% 10% 5%
+}
+
+/*線*/
+html:before,
+html:after,
+body:before,
+body:after {
+  content: '';
+  background: #E3F2E8;
+  position: fixed;
+  display: block;
+  z-index: -1;
+}
+/* 右 */
+html:after {
+  width: 3vw;
+  height: 100vh;
+  right: 0;
+  top: 0;
+  opacity: 0.5;
+}
+/* 左 */
+body:after {
+  width: 3vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
+/* 下 */
+body:before {
+  height: 3vw;
+  width: 100vw;
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+
 }

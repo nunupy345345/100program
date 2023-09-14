@@ -22,11 +22,12 @@
   font-size: 60px;
   line-height: 1.2;
   font-family: 'Helvetica';
-  font-weight: 500; 
+
+  font-weight: 500;
 }
 
 .kanji {
-  font-size: 128px
+  font-size: 128px;
 }
 
 .title {
@@ -37,4 +38,5 @@
   right: 0;
   text-align: center;
   opacity: 0.4;
+
 }

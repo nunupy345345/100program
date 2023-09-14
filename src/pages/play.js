@@ -125,7 +125,8 @@ export const Play = () => {
 
   //resultに変数を送信するよう
   const navigate = useNavigate();
-  const sendDataToAnotherPage = () => {//result画面に表示する用
+
+  const sendDataToAnotherPage = () => {//result画面に表示する用 改　
     const variable1 = historyList;
     const variable2 = missCounted
     navigate(`/result?var1=${variable1}&var2=${variable2}&time=${elapsedTime}`);

@@ -1,6 +1,8 @@
 import {NavLink,Rocation,useParams,useLocation} from "react-router-dom";
 import React, { useState, useEffect} from 'react' ;
 import './explain.css';
+import norenImage from "../images/header.png";
+
 
 export const Explain = () => {
 
