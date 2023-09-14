@@ -2,7 +2,7 @@ import {NavLink,useParams,useLocation,useNavigate} from "react-router-dom";
 import React, {useRef, useState, useEffect, KeyboardEvent} from 'react' ;
 import './play.css';
 import { keyboard } from "@testing-library/user-event/dist/keyboard";
-import { kanaToRoman } from "./KanaToRoman";
+import { kanaToRoman } from "./kanaToRoman";
 import { colorTyped } from "./colorTyped";
 import { TypingTimer } from "./timer";
 import { anime_word_list } from "./words";
@@ -125,6 +125,7 @@ export const Play = () => {
 
   //resultに変数を送信するよう
   const navigate = useNavigate();
+
   const sendDataToAnotherPage = () => {//result画面に表示する用 改　
     const variable1 = historyList;
     const variable2 = missCounted
@@ -175,3 +176,4 @@ export const Play = () => {
     </div>
   );
 }
+

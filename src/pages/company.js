@@ -8,12 +8,12 @@ export const Company = () => {
   const search = useLocation().search;
 
   const query2 = new URLSearchParams(search);
-  
+
   //クリックして別の場所に移るためのもの
   const handleClick = () => {
     window.location.href = "/start";
   }
-  
+
   return(
     <div>
       <div className='explain'>協賛企業様</div>

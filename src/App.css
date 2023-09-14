@@ -22,6 +22,7 @@
   font-size: 60px;
   line-height: 1.2;
   font-family: 'Helvetica';
+
   font-weight: 500;
 }
 
@@ -37,4 +38,5 @@
   right: 0;
   text-align: center;
   opacity: 0.4;
+
 }

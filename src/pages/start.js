@@ -11,6 +11,7 @@ import explainTitleImage from "../images/explainTitle.jpg";
 import explainImage from "../images/explain.jpg";
 import companyTitle from "../images/companyTitle.jpg";
 import companyExplain from "../images/companyExplain.jpg";
+
 export const Start = () => {
 
   //ページを変えても値を受け渡すやつ
@@ -33,6 +34,7 @@ export const Start = () => {
 
   return(
     <div>
+
       <header className='header'><img src={norenImage}/></header>
       <div className='body'><img src={titleImage}/><br/></div>
       <div className='title2'><img src={title2Image}/><br/></div>  
@@ -47,6 +49,7 @@ export const Start = () => {
       </div> 
       <div className="companytitleImg"><img src={companyTitle}/></div>
       <div className="companyExplainImg"><img src={companyExplain}/></div>
+
     </div>
   );
 }

@@ -28,6 +28,7 @@ export const Result = () => {
   const handleClick3 = () => {
     window.location.href = "/start";
   }
+
   //クリックして別の場所に移るためのもの
   const handleClick4 = () => {
     //window.location.href = "/coupon";
@@ -45,6 +46,7 @@ export const Result = () => {
 
   return(
     <div>
+
       <div className='header'><img src={norenImage} onClick={() => {handleClick4()}}/></div>
       <div className='yazirushi'><img src={yazirushiImage}/></div>
       <div className='yazirushiExplain'><img src={yazirushiExplainImage}/></div>
@@ -53,6 +55,7 @@ export const Result = () => {
       <div>経過時間: {receivedData3} 秒</div> */}
       <div className='arigatou'><img src={arigatouImage}/></div>
       <div className='ToTitle' onClick={() => {handleClick3()}}><img src={ToTitleImage}/></div>
+
     </div>
     
   );

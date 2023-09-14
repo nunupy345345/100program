@@ -3,10 +3,12 @@ import React, { useState, useEffect} from 'react' ;
 import './start.css';
 import norenImage from "../images/header.png";
 
+
 export const Coupon  = () => {
   const handleClick1 = () => {
     window.location.href = "/start";
   }
+
    //ページを変えても値を受け渡すやつ
    const search = useLocation().search;
 

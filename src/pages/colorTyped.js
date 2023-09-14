@@ -1,4 +1,6 @@
+
 export const colorTyped = (list, showList) => {
+
   let allRoman = showList.a;
   let idx1 = list.i1;
   let idx2 = list.i2;
@@ -26,4 +28,6 @@ export const colorTyped = (list, showList) => {
   html += '</span></div>';
   console.log(html);
   return html; 
+
 }
+
