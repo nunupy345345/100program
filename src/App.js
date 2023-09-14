@@ -27,7 +27,9 @@ function App() {
         <Route activeClassName="active" path="/company"element={<Company/>}/>
         <Route activeClassName="active" path="/explain"element={<Explain/>}/>
         <Route activeClassName="active" path="/coupon"element={<Coupon/>}/>
-
+        <Route path='/play' exact component={Play} />
+        <Route path='/result' component={Result}/>
+        
       </Routes>
     </BrowserRouter>
   </div>
