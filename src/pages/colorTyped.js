@@ -1,13 +1,11 @@
-
 export const colorTyped = (list, showList) => {
-
   let allRoman = showList.a;
   let idx1 = list.i1;
   let idx2 = list.i2;
   let idx3 = list.i3;
   let pattern = list.pn;
 
-  let html = '<div><span style="color:red">';
+  let html = '<div style=" font-size: 4vw; text-align:center"><span style="color:red;">';
   if (idx2 > 0) {
     for (let i = 0; i < idx2; i++){//成功箇所の色付け
       html += allRoman[i][pattern[i]];
@@ -28,6 +26,5 @@ export const colorTyped = (list, showList) => {
   html += '</span></div>';
   console.log(html);
   return html; 
-
 }
 
