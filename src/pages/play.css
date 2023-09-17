@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@700&display=swap');
 .correct {
   color: green;
 }
@@ -8,14 +9,37 @@
 
 .user-input {
   border: none;
-  border-bottom: 2px solid #333;
+  border-bottom: 10vw solid #333;
+  font-size: 6vw;
 }
 
 .input {
   outline: 'none';
   width: '100%';
   text-align: 'center';
-  font-Size: '24px'
+  font-Size: 10vw;
+}
+
+.header{
+position:fixed;
+top: 0px;
+left: 0px;
+}
+.Title{
+  font-size: 6vw;
+  margin: 12% 0% 0% 0%;
+  text-align: center;
+  font-family:'Zen Kaku Gothic New', sans-serif;
+}
+.hurigana{
+  text-align: center;
+  font-size: 2vw;
+  font-family:'Zen Kaku Gothic New', sans-serif;
+}
+.Roma{
+  font-size: 7vw;
+  text-align: center;
+  font-family:'Zen Kaku Gothic New', sans-serif;
 }
 
 
