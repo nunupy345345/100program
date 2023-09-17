@@ -119,4 +119,3 @@ export const kanaToRoman = function (kana) {
   }
   return AllRoman;
 }
-
