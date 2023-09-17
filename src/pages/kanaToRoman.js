@@ -1,4 +1,3 @@
-//日本語からローマ字へ変更する
 export const kanaToRoman = function (kana) {
   let AllStr = String(kana); //入力の全文
   let roman =[]; //一字毎に変換されたローマ字
@@ -19,16 +18,16 @@ export const kanaToRoman = function (kana) {
       roman = [...romanMap[firstStr]];
       for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
         for (let j=0; j<romanMap[firstStr.slice(1)].length; j++){
-          let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
-          roman.push(mergeroma);
+          let mergeRoman = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
+          roman.push(mergeRoman);
         }
       }
     } else {//表せない時
       roman = [];//それぞれのromanMapを全通り足し合わせる
       for (let i=0; i<romanMap[firstStr.slice(0, 1)].length; i++){
         for (let j=0; i<romanMap[firstStr.slice(1)].length; j++){
-          let mergeroma = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
-          roman.push(mergeroma);
+          let mergeRoman = romanMap[firstStr.slice(0, 1)][i] + romanMap[firstStr.slice(1)][j];
+          roman.push(mergeRoman);
         }
       }
     }
@@ -73,10 +72,10 @@ export const kanaToRoman = function (kana) {
     'ぴゃ': ['pya'], 'ぴぃ': ['pyi'], 'ぴゅ': ['pyu'], 'ぴぇ': ['pye'], 'ぴょ': ['pyo'],
     'ぁ': ['la', 'xa'], 'ぃ': ['li', 'xi'], 'ぅ': ['lu', 'xu'], 'ぇ': ['le', 'xe'], 'ぉ': ['lo', 'xo'],
     'ゃ': ['lya', 'xya'], 'ゅ': ['lyu', 'xyu'], 'ょ': ['lyo', 'xyo'], 'っ': ['ltu', 'xtu'],
-    'ー': ['-'], '、': [','], '。': ['.'], '・': ['/']
+    'ー': ['-'], '、': [','], '。': ['.'], '・': ['/'], '！': ['!'], '？':['?']
   };
 
-  while (AllStr) { //日本語文が存在する限り続く
+  function toRoman() {
     let firstStr = cutting(); //一文字目
     let next = romanMap[AllStr.slice(0, 1)]; //次の文字のローマ字
     if (!romanMap[firstStr]){
@@ -93,8 +92,8 @@ export const kanaToRoman = function (kana) {
         roman = [...romanMap[firstStr].map(str => str.slice(0, 1) + str)]; //後ろの文字の子音をひとつ増やしたものを追加
         for (let i=0; i<romanMap['っ'].length; i++){//省略しない場合も
           for (let j=0; j<romanMap[firstStr].length; j++){
-            let mergeroma = romanMap['っ'][i] + romanMap[firstStr][j];
-            roman.push(mergeroma);
+            let mergeRoman = romanMap['っ'][i] + romanMap[firstStr][j];
+            roman.push(mergeRoman);
           }
         }
       }
@@ -105,18 +104,29 @@ export const kanaToRoman = function (kana) {
       } else if (firstStr === 'ん') { //n一つで完了させない処理（省略禁止）
         if (!AllStr) {
           roman = ['nn', 'xn'];
+        } else if (next[0].match(/^[aiueony]/)){
+          roman = ['nn', 'xn'];
         } else {
-          if (next[0].match(/^[aiueony]/)) {
-            roman = ['nn', 'xn'];
-          };
-          roman = romanMap[firstStr];
+          let subRoman = romanMap[firstStr];
+          let subRoman2 = [];
+          toRoman();
+          for (let i=0; i<subRoman.length; i++){
+            for (let j=0; j<roman.length; j++){
+              let mergeRoman = subRoman[i] + roman[j];
+              subRoman2.push(mergeRoman);
+            }
+          }
+          roman = subRoman2;
         }
       } else{
         roman = romanMap[firstStr];
       } 
     }
+  } 
+
+  while (AllStr) { //日本語文が存在する限り続く
+    toRoman();
     AllRoman.push(roman);
   }
   return AllRoman;
 }
-
