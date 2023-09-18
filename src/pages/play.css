@@ -26,20 +26,24 @@ top: 0px;
 left: 0px;
 }
 .Title{
-  font-size: 6vw;
-  margin: 12% 0% 0% 0%;
+  font-size: 3vw;
+  margin: 10% 0% 0% 0%;
   text-align: center;
   font-family:'Zen Kaku Gothic New', sans-serif;
 }
 .hurigana{
   text-align: center;
-  font-size: 2vw;
+  font-size: 1vw;
   font-family:'Zen Kaku Gothic New', sans-serif;
 }
 .Roma{
-  font-size: 7vw;
+  font-size: 3vw;
   text-align: center;
   font-family:'Zen Kaku Gothic New', sans-serif;
 }
 
+.image{ 
+  height: 18vw;
+  margin:0% 25% 0% 25%;
+}
 

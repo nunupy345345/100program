@@ -5,20 +5,39 @@ import { keyboard } from "@testing-library/user-event/dist/keyboard";
 import { kanaToRoman } from "./KanaToRoman";
 import { colorTyped } from "./colorTyped";
 import { TypingTimer } from "./timer";
-import { anime_word_list } from "./words";
-import norenImage from "../images/header.png";
-  
+// import { anime_word_list } from "./words";
+// import norenImage from "../../public/images/header.png";
+// import jutemu from "../../public/images/jute-mu.png";
+// import momomoti from "../public/images/momomoti.png";
+// import azukiMattya from "../../public/images/azukiMattya.png";
+// import raisyunn from "../../public/images/raisyunn.png";
+// import suiu from "../../public/images/suiu-.png";
+// import riri from "../../public/images/riri-.png";
+
+
 export const Play = () => {
     
   //ページを変えても値を受け渡すやつ
   const search = useLocation().search;
   const query2 = new URLSearchParams(search);
   
+  const anime_word_list = 
+  [['ヒカリ堂のあずき抹茶ケーキ', 'ひかりどうのあずきまっちゃのけーき','azukiMattya.png'],
+  ['ヒカリ堂のモモもち','ひかりどうのもももち','momomoti.png'],
+  ['本格たまごケーキ ジュテーム','じゅてーむ',"jute-mu.png"],
+  ['本格冷凍焼きそば らいしゅん','らいしゅん',"raisyunn.png"],
+  ['子供も使える手洗い石鹸 リリー','りりー',"riri-.png"],
+  ['フランスのクッキー スィウー','suiu-',"suiu-.png"],
+  ['元気いっぱいビタミンブレッド','げんきいっぱいびたみんぶれっど',"suiu-.png"],
+  ['菊水の讃岐うどん','きくすいのさぬきうどん',"suiu-.png"],
+  ];
+
   let list_length = anime_word_list.length;
   const randomNumber = Math.floor(Math.random()*list_length);
   let allRoman = kanaToRoman(anime_word_list[randomNumber][1]);
   let idx1 = allRoman.length;
-
+  let b = "../images/azukiMattya.png";
+  let html = "";
   const initialListState = {
     i1 : allRoman.length,//取得リストの長さ
     i2 : 0,//プレイ中の場所
@@ -30,6 +49,7 @@ export const Play = () => {
   const initialShowList = {
     title: anime_word_list[randomNumber][0],
     jaTitle: anime_word_list[randomNumber][1],
+    img : anime_word_list[randomNumber][2],
     a: kanaToRoman(anime_word_list[randomNumber][1])
   };
   const [showList, setShowList] = useState(initialShowList);//表示用
@@ -49,7 +69,9 @@ export const Play = () => {
     setShowList({
       title: anime_word_list[newRandomNumber][0],
       jaTitle: anime_word_list[newRandomNumber][1],
+      img: anime_word_list[newRandomNumber][2],
       a: newAllRoman
+
     });
     setList({
       i1: newAllRoman.length,
@@ -163,16 +185,43 @@ export const Play = () => {
       sendDataToAnotherPage();
     }
   },[count]);
-
+  //innerHTMLのためのもの
+  const ImgPresent = () => {
+    if (showList.img == '../images/azukiMattya.png') {
+      html = '<img >'
+    };
+    if (showList.img == '../images/momomoti.png') {
+      html = '<img src={momomoti}>'
+    };
+    if (showList.img == '../images/jute-mu.png') {
+      html = '<img src={jutemu}>'
+    };
+    if (showList.img == '../images/raisyunn.png') {
+      html = '<img src={raisyunn}>'
+    };
+    if (showList.img == '../images/riri-.png') {
+      html = '<img src={riri}>'
+    };
+    if (showList.img == '../images/suiu-.png') {
+      html = '<img src={suiu}>'
+    };
+    return html
+  }
   return(
     <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
-      <header className='header'><img src={norenImage}/></header>
+      <header className='header'><img src='header.png'/></header>
       <TypingTimer onUpdate={(time) => setElapsedTime(time)} />
       <div className="Title">{showList.title}</div>
       <div className="hurigana">{showList.jaTitle}</div>
       <div dangerouslySetInnerHTML={{__html: colorTypedOutput }}/>
+      <div><img className="image" src='azukiMattya.png'alt={showList.img}/></div> {/*画像が貼れるかの確認(貼れてる)*/}
+      <div className="hurigana"><img src={showList.img} alt={showList.img}/></div> {/*{showList.img}が使えるかの確認 (使えない)*/}
+      {/* <div className="hurigana"><img src={b} alt={showList.img}/></div> {/*bに相対パスで表示できるかの確認(できない)*/}
+      {/* <div className="hurigana"><img src='../images/azukiMattya.png' alt={showList.img}/></div> 相対パスで貼れるかの確認 (できない) */}
+      {/* <div dangerouslySetInnerHTML={{__html: ImgPresent() }}/> innerHTMLで表示できるかの確認(できない) */}
       <button onClick={() => startNewRound()} id="hai">Next Round</button>
       <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 
+      {/* console.log({azukiMattya}) */}
     </div>
   );
 }

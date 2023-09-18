@@ -2,11 +2,11 @@ import {NavLink,Rocation,useParams,useLocation,useNavigate} from "react-router-d
 import React, { useState, useEffect} from 'react' ;
 import './result.css';
 //import sendDataToAnotherPage from "./play.js";
-import norenImage from "../images/header.png";
-import yazirushiImage from "../images/yazirushi.jpg";
-import yazirushiExplainImage from "../images/yazirushiExplain.jpg";
-import arigatouImage from "../images/arigatou.jpg";
-import ToTitleImage from "../images/ToTitle.jpg";
+// import norenImage from "../images/header.png";
+// import yazirushiImage from "../images/yazirushi.jpg";
+// import yazirushiExplainImage from "../images/yazirushiExplain.jpg";
+// import arigatouImage from "../images/arigatou.jpg";
+// import ToTitleImage from "../images/ToTitle.jpg";
 
 export const Result = () => {
 
@@ -47,14 +47,14 @@ export const Result = () => {
   return(
     <div>
 
-      <div className='header'><img src={norenImage} onClick={() => {handleClick4()}}/></div>
-      <div className='yazirushi'><img src={yazirushiImage}/></div>
-      <div className='yazirushiExplain'><img src={yazirushiExplainImage}/></div>
+      <div className='header'><img src='header.png' onClick={() => {handleClick4()}}/></div>
+      <div className='yazirushi'><img src='yazirushi.jpg'/></div>
+      <div className='yazirushiExplain'><img src='yazirushiExplain.jpg'/></div>
       {/* <div>{receivedData1}</div>
       <div>missCounted: {receivedData2}</div>
       <div>経過時間: {receivedData3} 秒</div> */}
-      <div className='arigatou'><img src={arigatouImage}/></div>
-      <div className='ToTitle' onClick={() => {handleClick3()}}><img src={ToTitleImage}/></div>
+      <div className='arigatou'><img src='arigatou.jpg'/></div>
+      <div className='ToTitle' onClick={() => {handleClick3()}}><img src='ToTitle.jpg'/></div>
 
     </div>
     

@@ -4,9 +4,9 @@ position:fixed;
 top: 0px;
 left: 0px;
 }
-.body {
+/* .body {
   background-image: url("../images/waku.png");
-}
+} */
 .receipt{
   text-align: center;
   font-size: 7vw;
