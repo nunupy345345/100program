@@ -5,7 +5,7 @@ export const colorTyped = (list, showList) => {
   let idx3 = list.i3;
   let pattern = list.pn;
 
-  let html = '<div style=" font-size: 4vw; text-align:center"><span style="color:red;">';
+  let html = '<div style="font-size: 4vw; text-align:center; backgroundImage: "url(/GreenWaku.png)""><span style="color:red;">';
   if (idx2 > 0) {
     for (let i = 0; i < idx2; i++){//成功箇所の色付け
       html += allRoman[i][pattern[i]];

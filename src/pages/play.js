@@ -28,8 +28,11 @@ export const Play = () => {
   ['本格冷凍焼きそば らいしゅん','らいしゅん',"raisyunn.png"],
   ['子供も使える手洗い石鹸 リリー','りりー',"riri-.png"],
   ['フランスのクッキー スィウー','suiu-',"suiu-.png"],
-  ['元気いっぱいビタミンブレッド','げんきいっぱいびたみんぶれっど',"suiu-.png"],
-  ['菊水の讃岐うどん','きくすいのさぬきうどん',"suiu-.png"],
+  ['元気いっぱいビタミンブレード','びたみんぶれーど',"bitaminBread.png"],
+  ['菊水の讃岐うどん','きくすいのさぬきうどん',"Sanuki.png"],
+  ['菊水の讃岐うどん','きくすいのさぬきうどん',"Sanuki.png"],
+  ['菊水の讃岐うどん','きくすいのさぬきうどん',"Sanuki.png"],
+  
   ];
 
   let list_length = anime_word_list.length;
@@ -185,28 +188,7 @@ export const Play = () => {
       sendDataToAnotherPage();
     }
   },[count]);
-  //innerHTMLのためのもの
-  const ImgPresent = () => {
-    if (showList.img == '../images/azukiMattya.png') {
-      html = '<img >'
-    };
-    if (showList.img == '../images/momomoti.png') {
-      html = '<img src={momomoti}>'
-    };
-    if (showList.img == '../images/jute-mu.png') {
-      html = '<img src={jutemu}>'
-    };
-    if (showList.img == '../images/raisyunn.png') {
-      html = '<img src={raisyunn}>'
-    };
-    if (showList.img == '../images/riri-.png') {
-      html = '<img src={riri}>'
-    };
-    if (showList.img == '../images/suiu-.png') {
-      html = '<img src={suiu}>'
-    };
-    return html
-  }
+
   return(
     <div className="StyleSheet.container" onKeyDown={handleKeyDown} tabIndex={0}>
       <header className='header'><img src='header.png'/></header>
@@ -214,14 +196,8 @@ export const Play = () => {
       <div className="Title">{showList.title}</div>
       <div className="hurigana">{showList.jaTitle}</div>
       <div dangerouslySetInnerHTML={{__html: colorTypedOutput }}/>
-      <div><img className="image" src='azukiMattya.png'alt={showList.img}/></div> {/*画像が貼れるかの確認(貼れてる)*/}
-      <div className="hurigana"><img src={showList.img} alt={showList.img}/></div> {/*{showList.img}が使えるかの確認 (使えない)*/}
-      {/* <div className="hurigana"><img src={b} alt={showList.img}/></div> {/*bに相対パスで表示できるかの確認(できない)*/}
-      {/* <div className="hurigana"><img src='../images/azukiMattya.png' alt={showList.img}/></div> 相対パスで貼れるかの確認 (できない) */}
-      {/* <div dangerouslySetInnerHTML={{__html: ImgPresent() }}/> innerHTMLで表示できるかの確認(できない) */}
-      <button onClick={() => startNewRound()} id="hai">Next Round</button>
-      <button onClick={() => {handleClick2()}} id="hai">resultへ</button> 
-      {/* console.log({azukiMattya}) */}
+      <div><img className="image" src={showList.img} alt={showList.img}/></div>
+    
     </div>
   );
 }
